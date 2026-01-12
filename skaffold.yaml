@@ -1,0 +1,14 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: token-server-demo
+build:
+  artifacts:
+  - image: token-server-demo
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - k8s/deployment.yaml
+    - k8s/service.yaml
