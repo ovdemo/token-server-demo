@@ -76,6 +76,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
+        // NOTE: This is for demo purposes only. In production, use a proper UserDetailsService
+        // with externalized user management and secure password encoding (e.g., BCrypt)
         UserDetails userDetails = User.withDefaultPasswordEncoder()
             .username("user")
             .password("password")
@@ -87,6 +89,8 @@ public class SecurityConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
+        // NOTE: This is for demo purposes only. In production, use a persistent
+        // RegisteredClientRepository with externalized client management and secure secret storage
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
             .clientId("client")
             .clientSecret("{noop}secret")
@@ -109,6 +113,9 @@ public class SecurityConfig {
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
+        // NOTE: This generates a new RSA key pair on each application restart.
+        // In production, use persistent key storage or externalized key management
+        // to prevent invalidating tokens on restart
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
