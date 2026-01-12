@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: token-server-demo
+  labels:
+    app: token-server-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: token-server-demo
+  template:
+    metadata:
+      labels:
+        app: token-server-demo
+    spec:
+      containers:
+      - name: token-server-demo
+        image: token-server-demo
+        ports:
+        - containerPort: 9000
+          name: http
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "default"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9000
+          initialDelaySeconds: 20
+          periodSeconds: 5
