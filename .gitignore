@@ -30,3 +30,5 @@ buildNumber.properties
 
 # Logs
 *.log
+
+scratch

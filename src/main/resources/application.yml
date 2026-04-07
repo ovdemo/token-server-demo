@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: token-server-demo
+  jpa:
+    defer-datasource-initialization: true
 
 management:
   endpoints:
