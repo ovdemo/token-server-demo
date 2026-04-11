@@ -5,7 +5,6 @@ metadata:
   labels:
     app: token-server-demo
 spec:
-  type: NodePort
   ports:
   - port: 9000
     targetPort: 9000

@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS TPP_USER (
     enabled BOOLEAN
 );
 INSERT INTO TPP_USER (username, password, account_non_expired, account_non_locked, credentials_non_expired, enabled)
-VALUES ('user','add hashed password for testing', true, true, true, true);
+VALUES ('user','$2a$12$4leyAR.ClA1VZo.k7800NObq8ZRd5L13/5CeotFoHCZ1UH1BqClsa', true, true, true, true);

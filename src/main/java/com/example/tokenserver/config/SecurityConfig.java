@@ -12,9 +12,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -67,11 +65,16 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers(HttpMethod.POST, "/register").permitAll()
                 .anyRequest().authenticated()
             )
+            // CSRF is not required for stateless REST API clients using bearer tokens
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/register/**"))
             // Form login handles the redirect to the login page from the
             // authorization server filter chain
-            .formLogin(Customizer.withDefaults());
+            .formLogin(Customizer.withDefaults())
+            // Accept OAuth2 JWT bearer tokens for /register/{clientId} endpoints
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
     }
@@ -88,8 +91,8 @@ public class SecurityConfig {
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
             .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-            .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client")
-            .redirectUri("http://127.0.0.1:8080/authorized")
+            .redirectUri("http://127.0.0.1:9000/login/oauth2/code/client")
+            .redirectUri("http://127.0.0.1:9000/authorized")
             .scope(OidcScopes.OPENID)
             .scope(OidcScopes.PROFILE)
             .scope("read")
